@@ -1,0 +1,24 @@
+.table {
+  background-color: var(--bg-table);
+  font-size: 14px;
+  width: 100%;
+
+  thead {
+    text-align: left;
+    white-space: nowrap;
+
+    .th {
+      background-color: var(--bg-table-cell);
+      padding: 5px 10px;
+      font-weight: 500;
+    }
+  }
+
+  tbody {
+    .td {
+      font-size: 12px;
+      padding: 5px 10px;
+      background-color: var(--bg-table-cell);
+    }
+  }
+}
