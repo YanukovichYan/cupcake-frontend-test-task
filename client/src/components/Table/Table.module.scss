@@ -9,16 +9,23 @@
 
     .th {
       background-color: var(--bg-table-cell);
-      padding: 5px 10px;
+      padding: 15px;
       font-weight: 500;
+      color: var(--text-color);
     }
   }
 
   tbody {
     .td {
       font-size: 12px;
-      padding: 5px 10px;
+      padding: 15px;
       background-color: var(--bg-table-cell);
+      color: var(--text-color);
+
+      &.active {
+        background-color: var(--active-table-cell);
+        color: var(--active-text-color);
+      }
     }
   }
 }

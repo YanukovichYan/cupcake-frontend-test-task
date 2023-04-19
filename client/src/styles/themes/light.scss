@@ -1,5 +1,9 @@
 :root[data-theme="light"] {
+  --bg-page: rgb(255 255 255);
   --bg-table: #c4c4c4;
   --bg-table-cell: #f2f2f2;
+  --active-table-cell: rgb(0 145 255);
+  --text-color: rgb(0 0 0);
+  --active-text-color: rgb(255 255 255);
   --theme-btn-bg: #c4c4c4;
 }

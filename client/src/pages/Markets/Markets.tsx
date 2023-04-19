@@ -1,108 +1,127 @@
-import { ApiDataObjType, MarketsResponseData } from '@/api'
-import { Table } from '@/components'
-import { theadList } from '@/config'
+import { ApiDataType, MarketsResponseData } from '@/api'
+import { Loader, Table } from '@/components'
 import {
-  getAllMarkets,
-  subscribeToUpdateFirstApi,
-  subscribeToUpdateSecondApi,
-  subscribeToUpdateThirdApi,
+  afterErrorReconnectDelay,
+  initApiData,
+  initConnectObj,
+  InitConnectType,
+  theadList,
+} from '@/config'
+import {
+  subscribeToFirstApi,
+  subscribeToSecondApi,
+  subscribeToThirdApi,
+  useSubscribeToSecondApi,
 } from '@/helpers'
+import { useGetAllMarkets } from '@/helpers/hooks'
 
 import React, { useEffect, useState } from 'react'
 
 import c from './Markets.module.scss'
 
 export const Markets = () => {
-  const [apiData, setApiData] = useState<ApiDataObjType | null>(null)
-  const [serviceConnection, setServiceConnection] = useState({
-    firstApi: false,
-    secondApi: false,
-    thirdApi: false,
-  })
+  const [apiData, setApiData] = useState<ApiDataType>(initApiData)
+
+  const [serviceConnection, setServiceConnection] =
+    useState<InitConnectType>(initConnectObj)
+
+  const { allMarkets, isLoading } = useGetAllMarkets<MarketsResponseData>()
 
   useEffect(() => {
-    const data = getAllMarkets<MarketsResponseData>()
-    data.then((res) => {
-      setApiData({
-        firstApi: res[0],
-        secondApi: res[1],
-        thirdApi: res[2],
-      })
-    })
-  }, [])
+    setApiData(allMarkets)
+  }, [allMarkets])
 
   useEffect(() => {
-    !serviceConnection.firstApi && updateMarkets()
-    // !serviceConnection.secondApi && updateMarkets2()
-    !serviceConnection.thirdApi && updateMarkets3()
+    // !serviceConnection.firstApi && updateFromFirstApi()
+    // !serviceConnection.secondApi && updateFromSecondApi()
+    // !serviceConnection.thirdApi && updateFromThirdApi()
   }, [apiData])
 
-  const updateMarkets = async () => {
-    setServiceConnection((prev) => ({
-      ...prev,
-      firstApi: true,
-    }))
+  const { dataFromFirstApi } = useSubscribeToSecondApi()
 
-    try {
-      const res = await subscribeToUpdateFirstApi()
-
-      setApiData((prev) => ({ ...prev, firstApi: res }))
-
-      await updateMarkets()
-    } catch (e: any) {
-      console.log(1, e)
-      setTimeout(() => {
-        updateMarkets()
-      }, 500)
+  useEffect(() => {
+    if (!serviceConnection.firstApi) {
+      setServiceConnection((prev) => ({
+        ...prev,
+        firstApi: true,
+      }))
     }
-  }
 
-  const updateMarkets2 = async () => {
+    setApiData((prev) => ({ ...prev, firstApi: dataFromFirstApi }))
+  }, [dataFromFirstApi])
+
+  // const updateFromFirstApi = async () => {
+  //   try {
+  //     const res: MarketsResponseData | null =
+  //       await subscribeToFirstApi<MarketsResponseData>()
+  //
+  //     if (res) {
+  //       setApiData((prev) => ({ ...prev, firstApi: res }))
+  //     }
+  //
+  //     await updateFromFirstApi()
+  //   } catch (e: unknown) {
+  //     setTimeout(() => {
+  //       updateFromFirstApi()
+  //     }, afterErrorReconnectDelay)
+  //   }
+  // }
+
+  const updateFromSecondApi = async () => {
     setServiceConnection((prev) => ({
       ...prev,
       secondApi: true,
     }))
 
     try {
-      const res = await subscribeToUpdateSecondApi()
+      const res: MarketsResponseData | null =
+        await subscribeToSecondApi<MarketsResponseData>()
 
-      setApiData((prev) => ({ ...prev, secondApi: res }))
+      if (res) {
+        setApiData((prev) => ({ ...prev, secondApi: res }))
+      }
 
-      await updateMarkets2()
-    } catch (e: any) {
-      console.log(2, e)
+      await updateFromSecondApi()
+    } catch (e: unknown) {
       setTimeout(() => {
-        updateMarkets2()
-      }, 500)
+        updateFromSecondApi()
+      }, afterErrorReconnectDelay)
     }
   }
 
-  const updateMarkets3 = async () => {
+  const updateFromThirdApi = async () => {
     setServiceConnection((prev) => ({
       ...prev,
       thirdApi: true,
     }))
 
     try {
-      const res = await subscribeToUpdateThirdApi()
+      const res: MarketsResponseData | null =
+        await subscribeToThirdApi<MarketsResponseData>()
 
-      setApiData((prev) => ({ ...prev, thirdApi: res }))
+      if (res) {
+        setApiData((prev) => ({ ...prev, thirdApi: res }))
+      }
 
-      await updateMarkets3()
-    } catch (e: any) {
-      console.log(3, e)
+      await updateFromThirdApi()
+    } catch (e: unknown) {
       setTimeout(() => {
-        updateMarkets3()
-      }, 500)
+        updateFromThirdApi()
+      }, afterErrorReconnectDelay)
     }
   }
 
+  const isShowTable: boolean =
+    Object.values(apiData).some((data) => data) && !isLoading
+
   return (
     <>
-      {apiData && (
+      {isShowTable ? (
         <div className={c.container}>
           <Table theadList={theadList} tbodyData={apiData} />
         </div>
+      ) : (
+        <Loader />
       )}
     </>
   )

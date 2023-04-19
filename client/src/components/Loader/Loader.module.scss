@@ -1,0 +1,27 @@
+.bandLoader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100vw;
+  height: 3px;
+  background-color: rgb(231, 235, 240);
+
+  &::after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: calc(100vw - 50%);
+    background-color: rgb(56, 142, 229);
+    animation: slide 1.5s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}

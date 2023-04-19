@@ -1,9 +1,21 @@
 import { api } from '@/api'
 
-const subscribeToUpdateFirstApi = () => api.firstPoll()
+const subscribeToFirstApi = async <TResponseData>() => {
+  const { data } = await api.firstPoll<TResponseData>()
 
-const subscribeToUpdateSecondApi = () => api.secondPoll()
+  return data
+}
 
-const subscribeToUpdateThirdApi = () => api.thirdPoll()
+const subscribeToSecondApi = async <TResponseData>() => {
+  const { data } = await api.secondPoll<TResponseData>()
 
-export { subscribeToUpdateFirstApi, subscribeToUpdateSecondApi, subscribeToUpdateThirdApi }
+  return data
+}
+
+const subscribeToThirdApi = async <TResponseData>() => {
+  const { data } = await api.thirdPoll<TResponseData>()
+
+  return data
+}
+
+export { subscribeToFirstApi, subscribeToSecondApi, subscribeToThirdApi }

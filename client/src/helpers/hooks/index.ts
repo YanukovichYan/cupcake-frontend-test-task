@@ -1,2 +1,3 @@
-export { getAllMarkets } from './getAllMarkets'
+export { useGetAllMarkets } from './useGetAllMarkets'
+export { useSubscribeToSecondApi } from './useSubscribeToSecondApi'
 export * from './subscribeToUpdate'
