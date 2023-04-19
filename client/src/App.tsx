@@ -1,14 +1,13 @@
 import { ThemeButton } from '@/components'
-import { Exchange } from '@/pages'
+import { Markets } from '@/pages'
 
 import React from 'react'
 
 export const App = () => {
-
   return (
     <div>
       <ThemeButton />
-      <Exchange />
+      <Markets />
     </div>
   )
 }

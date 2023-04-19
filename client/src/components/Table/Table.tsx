@@ -1,20 +1,21 @@
+import { ApiDataObjType } from '@/api'
+import { currencyPairs } from '@/config'
+import { calculateValCurrPair } from '@/helpers'
+
 import React from 'react'
 
 import c from './Table.module.scss'
 
 interface ITableProps {
   theadList: string[]
-  tbodyData: any
+  tbodyData: ApiDataObjType
 }
 
 export const Table = ({ theadList, tbodyData }: ITableProps) => {
-  // fetch('http://localhost:3000/api/v1/first')
-  //   .then((res) => res.json())
-  //   .then((data) => console.log(data))
-
   return (
     <table className={c.table}>
       <colgroup style={{ width: '20%' }} />
+      <colgroup span={3} style={{ width: '20%' }} />
       <thead>
         <tr>
           {theadList.map((title: string) => (
@@ -25,12 +26,12 @@ export const Table = ({ theadList, tbodyData }: ITableProps) => {
         </tr>
       </thead>
       <tbody>
-        {tbodyData.map((market: any) => (
-          <tr key={market.id}>
-            <td className={c.td}>{market.name}</td>
-            <td className={c.td}>{market.firstValue}</td>
-            <td className={c.td}>{market.firstValue}</td>
-            <td className={c.td}>{market.firstValue}</td>
+        {currencyPairs.map((market: string, i: number) => (
+          <tr key={market + i}>
+            <td className={c.td}>{market}</td>
+            <td className={c.td}>{calculateValCurrPair(market, tbodyData['firstApi'])}</td>
+            <td className={c.td}>{calculateValCurrPair(market, tbodyData['secondApi'])}</td>
+            <td className={c.td}>{calculateValCurrPair(market, tbodyData['thirdApi'])}</td>
           </tr>
         ))}
       </tbody>
