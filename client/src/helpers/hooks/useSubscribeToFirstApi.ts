@@ -3,33 +3,33 @@ import { afterErrorReconnectDelay } from '@/config'
 
 import { useEffect, useState } from 'react'
 
-export const useSubscribeToSecondApi = <
+export const useSubscribeToFirstApi = <
   TResponseData = MarketsResponseData,
 >() => {
-  const [dataFromSecondApi, setDataFromSecondApi] =
+  const [dataFromFirstApi, setDataFromFirstApi] =
     useState<TResponseData | null>(null)
 
-  const updateFromSecondApi = async () => {
+  const updateFromFirstApi = async () => {
     try {
-      const { data } = await api.secondPoll<TResponseData>()
+      const { data } = await api.firstPoll<TResponseData>()
 
       if (data) {
-        setDataFromSecondApi(data)
+        setDataFromFirstApi(data)
       }
 
-      await updateFromSecondApi()
+      await updateFromFirstApi()
     } catch (e: unknown) {
       setTimeout(() => {
-        updateFromSecondApi()
+        updateFromFirstApi()
       }, afterErrorReconnectDelay)
     }
   }
 
   useEffect(() => {
-    updateFromSecondApi()
+    updateFromFirstApi()
   }, [])
 
   return {
-    dataFromSecondApi,
+    dataFromFirstApi,
   }
 }

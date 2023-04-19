@@ -1,3 +1,4 @@
 export { useGetAllMarkets } from './useGetAllMarkets'
+export { useSubscribeToFirstApi } from './useSubscribeToFirstApi'
 export { useSubscribeToSecondApi } from './useSubscribeToSecondApi'
-export * from './subscribeToUpdate'
+export { useSubscribeToThirdApi } from './useSubscribeToThirdApi'

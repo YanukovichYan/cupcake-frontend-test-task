@@ -2,7 +2,7 @@ import { ApiDataType } from '@/api'
 import { currencyPairs } from '@/config'
 import { calculateValCurrPair } from '@/helpers'
 
-import React from 'react'
+import React, { memo } from 'react'
 
 import c from './Table.module.scss'
 
@@ -11,9 +11,9 @@ interface ITableProps {
   tbodyData: ApiDataType
 }
 
-export const Table = ({ theadList, tbodyData }: ITableProps) => (
+export const Table = memo(({ theadList, tbodyData }: ITableProps) => (
   <table className={c.table}>
-    <colgroup style={{ width: '5%' }} />
+    <colgroup style={{ width: '8%' }} />
     <colgroup span={3} style={{ width: '5%' }} />
     <thead>
       <tr>
@@ -64,4 +64,4 @@ export const Table = ({ theadList, tbodyData }: ITableProps) => (
       })}
     </tbody>
   </table>
-)
+))

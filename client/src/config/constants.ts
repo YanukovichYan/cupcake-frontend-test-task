@@ -29,22 +29,13 @@ const initApiData: ApiDataType = {
   thirdApi: null,
 }
 
-type InitConnectType = { [key in ApiNameTitles]: boolean }
-
-const initConnectObj: InitConnectType = {
-  firstApi: false,
-  secondApi: false,
-  thirdApi: false,
-}
-
 export {
   host,
   currencyPairs,
   theadList,
   initApiValue,
   initApiData,
-  initConnectObj,
   afterErrorReconnectDelay,
 }
 
-export type { ApiValueType, InitConnectType }
+export type { ApiValueType }
