@@ -37,11 +37,11 @@ export const Table = memo(({ theadList, tbodyData }: ITableProps) => (
         const isActive = (apiId: number): boolean => {
           switch (apiId) {
             case 1:
-              return +firstApiVal === Math.min(...rowValues)
+              return +firstApiVal === Math.min(...rowValues.filter((v) => !!v))
             case 2:
-              return +secondApiVal === Math.min(...rowValues)
+              return +secondApiVal === Math.min(...rowValues.filter((v) => !!v))
             case 3:
-              return +thirdApiVal === Math.min(...rowValues)
+              return +thirdApiVal === Math.min(...rowValues.filter((v) => !!v))
             default:
               return false
           }
@@ -49,19 +49,21 @@ export const Table = memo(({ theadList, tbodyData }: ITableProps) => (
 
         return (
           <tr key={market + i}>
-            <td className={c.td}>{market}</td>
-            <td className={`${c.td} ${isActive(1) && c.active}`}>
-              {firstApiVal}
-            </td>
-            <td className={`${c.td} ${isActive(2) && c.active}`}>
-              {secondApiVal}
-            </td>
-            <td className={`${c.td} ${isActive(3) && c.active}`}>
-              {thirdApiVal}
-            </td>
+            <TCell val={market} />
+            <TCell isActive={isActive(1)} val={firstApiVal} />
+            <TCell isActive={isActive(2)} val={secondApiVal} />
+            <TCell isActive={isActive(3)} val={thirdApiVal} />
           </tr>
         )
       })}
     </tbody>
   </table>
 ))
+
+const TCell = memo(({isActive, val}: {isActive?: boolean; val: string  }) => {
+  return (
+    <td className={`${c.td} ${isActive && c.active}`}>
+      {val}
+    </td>
+  )
+})
