@@ -1,13 +1,15 @@
 import { api, MarketsResponseData } from '@/api'
 import { afterErrorReconnectDelay } from '@/config'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export const useSubscribeToSecondApi = <
   TResponseData = MarketsResponseData,
 >() => {
   const [dataFromSecondApi, setDataFromSecondApi] =
     useState<TResponseData | null>(null)
+
+  const connection = useRef(true)
 
   const updateFromSecondApi = async () => {
     try {
@@ -17,7 +19,9 @@ export const useSubscribeToSecondApi = <
         setDataFromSecondApi(data)
       }
 
-      await updateFromSecondApi()
+      if (connection.current) {
+        await updateFromSecondApi()
+      }
     } catch (e: unknown) {
       setTimeout(() => {
         updateFromSecondApi()
@@ -27,6 +31,10 @@ export const useSubscribeToSecondApi = <
 
   useEffect(() => {
     updateFromSecondApi()
+
+    return () => {
+      connection.current = false
+    }
   }, [])
 
   return {
